@@ -185,7 +185,7 @@ CORRECTION_PATTERNS = [
     # "4500 rupees. Sorry, wait, not 4500. Make it 5200 rupees" -> "5200 rupees"
     (
         re.compile(
-            r"\b(\d[\d,]*\s*(?:rupees|rs)?)[.,\s-]*(?:sorry\s+wait|no\s+wait|sorry|no\s+sorry|wait|kaadu|vaddu|nahi)[.,\s-]*(?:not\s+\d[\d,]*[.,\s]*)?(?:make\s+it|change\s+to|ante|adi)\s+(\d[\d,]*\s*(?:rupees|rs)?)",
+            r"\b(\d[\d,]*\s*(?:rupees|rs)?)[.,\s-]*(?:sorry[,\s]+wait|no[,\s]+wait|sorry|no[,\s]+sorry|wait|kaadu|vaddu|nahi)[.,\s-]*(?:not\s+\d[\d,]*[.,\s]*)?(?:make\s+it|change\s+to|ante|adi)\s+(\d[\d,]*\s*(?:rupees|rs)?)",
             re.I,
         ),
         r"\2",
@@ -193,7 +193,7 @@ CORRECTION_PATTERNS = [
     # "at 7:30 p.m. sorry, 8:00 p.m." or "at 6 p.m., no sorry, 6:30 p.m." -> "at 8:00 PM"
     (
         re.compile(
-            r"\b(\d{1,2}(?::\d{2})?\s*(?:p\.?m\.?|a\.?m\.?))[\s.,-]*\s*(?:no\s+sorry|sorry\s+wait|no\s+wait|sorry|kaadu|vaddu|actually)[.,\s]*(?:make\s+it\s*)?(\d{1,2}(?::\d{2})?\s*(?:p\.?m\.?|a\.?m\.?))",
+            r"\b(\d{1,2}(?::\d{2})?\s*(?:p\.?m\.?|a\.?m\.?))[\s.,-]*\s*(?:no[,\s]+sorry|sorry[,\s]+wait|no[,\s]+wait|sorry|kaadu|vaddu|actually)[.,\s]*(?:make\s+it\s*)?(\d{1,2}(?::\d{2})?\s*(?:p\.?m\.?|a\.?m\.?))",
             re.I,
         ),
         r"\2",
@@ -201,7 +201,7 @@ CORRECTION_PATTERNS = [
     # "location Madhapur kaadu. Sorry, wait, make it RMZ The Loft, Raidurg" -> "location RMZ The Loft, Raidurg"
     (
         re.compile(
-            r"\b(location|to)\s+([A-Za-z]+)\s+(?:kaadu|kadu|not|nahi)?[.,\s-]*(?:sorry\s+wait|no\s+wait|no\s+sorry|kaadu)[.,\s]*(?:make\s+it\s*)?([A-Za-z0-9,\s]+?)(?=\s+lo\b|\s+at\b|\s+on\b|$)",
+            r"\b(location|to)\s+([A-Za-z]+)\s+(?:kaadu|kadu|not|nahi)?[.,\s-]*(?:sorry[,\s]+wait|no[,\s]+wait|no[,\s]+sorry|sorry|kaadu)[.,\s]*(?:make\s+it\s*)?([A-Za-z0-9,\s]+?)(?=\s+lo\b|\s+at\b|\s+on\b|$)",
             re.I,
         ),
         r"\1 \3",
