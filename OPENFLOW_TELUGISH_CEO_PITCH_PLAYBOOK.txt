@@ -1,0 +1,58 @@
+================================================================================
+90-SECOND DESK PITCH & DEMO PLAYBOOK FOR KESHAV REDDY, AKHILESH & RAJEEV (EQUAL AI)
+================================================================================
+
+1. THE 15-SECOND HOOK (How to open the conversation when Keshav / Akhilesh stops by):
+   "Keshav / Akhilesh — huge congrats on crossing 1 Million Daily Active Users this week!
+    I read your TechCrunch interview where you mentioned that India's biggest Voice AI bottleneck
+    is code-mixing — how nobody in Hyderabad speaks pure textbook Telugu or pure American English,
+    we blend Telugu grammar with English words ('Telugish').
+    When you pass spoken Telugish into stock OpenAI Whisper, two things break:
+    (1) Stock Whisper-Tiny/Small suffers a 65% to 72% Word Error Rate and hallucinates random scripts.
+    (2) Existing Telugu models (like Vasista Whisper-Telugu) output pure Telugu Unicode script (తెలుగు),
+        mangle English tech/banking words, and cut off after 8 seconds because Telugu Unicode expands BPE tokens 4x.
+    So I engineered and open-sourced OpenFlow-Telugish — a suite of 5 INT8-quantized CTranslate2 Whisper models
+    that decode spoken code-switched Telugish directly into Romanized Telugish in 28 milliseconds."
+
+2. WHAT YOU actually DID UNDER THE HOOD (Your 3 Technical Engineering Innovations):
+   - Innovation A (Curated 9.78-Hour / 4,317-Utterance Multi-Condition Corpus):
+     Combined 3,120 real human recordings (Google FLEURS te_in, OpenSLR SLR66, AI4Bharat Svarah,
+     and unscripted Telugu-English YouTube speech) with 1,197 code-switched utterances across
+     5 domains (Delivery, FinTech/UPI, Software/DevOps, Medical, Workplace) augmented with
+     ambient noise, room reverb, and 8 kHz telephony bandpass filtering.
+   - Innovation B (Dual-Architecture Engineering — WiSE-FT Hybrid + End-to-End Direct-to-Roman):
+     1) Architecture 1 (WiSE-FT Weight-Space Ensemble): Fused 92% of 1,000-hour Telugu acoustic weights
+        with 8% of OpenAI English weights in weight-space (theta = 0.92*theta_te + 0.08*theta_en) so the
+        decoder retains English technical vocabulary without catastrophic forgetting, paired with a
+        pause-valley chunker and phonetic-to-Roman transducer.
+     2) Architecture 2 (End-to-End Direct-to-Roman Decoder): Fine-tuned Whisper-Tiny and Whisper-Small
+        in bf16 mixed precision on a CUDA GPU with SpecAugment so the neural decoder emits Romanized Telugish
+        directly (no Telugu BPE token explosion, supporting 30s+ continuous monologues).
+   - Innovation C (CTranslate2 INT8 Post-Training Quantization for Edge & Telephony):
+     Quantized all 5 models to INT8:
+     - Shrinks Whisper-Tiny weights by 3.83x (147.8 MB -> 38.6 MB model.bin) with only +0.66% WER degradation
+       (11.67% FP16 -> 12.33% INT8 on CS-82, down from 65.67% on stock Whisper-Tiny).
+     - OpenFlow-Small-INT8 (236.7 MB) reaches 7.00% Raw WER (6.11% Phonetic-Normalized WER) on CS-82
+       and drops Real-120 Human WER from 72.84% -> 18.06%.
+     - Runs at 28.4 ms per short chunk on a CUDA GPU (35x real-time) and 13x-17x real-time offline on CPU.
+
+3. HOW TO connect IT TO TODAY'S HACKATHON BUILD (So They Know What Was Built Before vs. Today):
+   "I published the 5 base INT8 speech checkpoints open-source on Hugging Face earlier this week.
+    And TODAY during the 36-hour hackathon, I'm building VAANI-HARNESS on top of it — the full-duplex
+    Indian Voice Harness around the model:
+    1) Indic Semantic VAD (looks at dangling Telugu/Hindi/English postpositions like 'lo', 'ki', 'to'
+       so it doesn't cut off Indian speakers during a 700ms mid-sentence pause),
+    2) Full-Duplex Backchannel Shield (ignores 'Haan / Sare / Avunu' and auto-rickshaw horns while the AI talks),
+    3) Phonetic Indian Entity Lattice (repairs 'Akhilesh Damaraju', 'RMZ The Loft, Raidurg', 'HDFC NEFT'), and
+    4) Smart Dictation + OpenAI GPT-4o & AWS Polly Kajal Closed-Loop Action Agent!"
+
+4. THE 30-SECOND LIVE DEMO SEQUENCE ON YOUR LAPTOP:
+   - Step 1 (10s): Show the Hugging Face repo (`huggingface.co/Johnwick0007/openflow-telugish`) and the
+     3-panel benchmark chart (`linkedin_benchmark_chart.png`).
+   - Step 2 (20s): Switch to your live `VAANI-HARNESS` studio (`http://localhost:8099`), select Recording #3
+     ("Anna, delivery location Madhapur kaadu, sorry wait, make it RMZ The Loft, Raidurg lo main gate daggara drop cheyandi"),
+     and click Run A/B Comparison:
+     * Point to the LEFT (Base Whisper + 300ms VAD): Cuts off at the pause & mangles Telugish.
+     * Point to the RIGHT (VAANI-HARNESS + OpenFlow-Telugish): Holds the turn, transcribes the Telugish cleanly,
+       deletes the self-correction ("Madhapur kaadu -> RMZ The Loft, Raidurg"), and triggers the GPT-4o + AWS Polly Kajal action loop!
+================================================================================
