@@ -24,16 +24,24 @@ from harness.agent_executor import AutonomousActionExecutor
 from harness.pillars import FullDuplexArbitrator, IndianEntityLattice, SmartDictationEngine
 from harness.semantic_vad import IndicSemanticVAD
 
-BASE_DIR = Path("/home/pavan_veesam/vaani_harness")
+BASE_DIR = Path(__file__).resolve().parent
 SAMPLES_DIR = BASE_DIR / "samples"
 
 app = FastAPI(title="VAANI-HARNESS: Voice AI Harness for India")
 
 print("Loading Base Model (whisper-tiny INT8) and VAANI-HARNESS Models (OpenFlow-Telugish-Small-INT8 + whisper-small INT8)...", flush=True)
 MODEL_BASE = WhisperModel("tiny", device="cpu", compute_type="int8")
-TELUGISH_PATH = "/home/pavan_veesam/telugish_whisper_edge/models/telugish-whisper-small-int8"
-MODEL_TELUGISH = WhisperModel(TELUGISH_PATH, device="cpu", compute_type="int8")
 MODEL_SMALL = WhisperModel("small", device="cpu", compute_type="int8")
+TELUGISH_PATH = Path("/home/pavan_veesam/telugish_whisper_edge/models/telugish-whisper-small-int8")
+if TELUGISH_PATH.exists():
+    MODEL_TELUGISH = WhisperModel(str(TELUGISH_PATH), device="cpu", compute_type="int8")
+else:
+    try:
+        from huggingface_hub import snapshot_download
+        dl_dir = snapshot_download(repo_id="Johnwick0007/openflow-telugish", allow_patterns=["models/telugish-whisper-small-int8/*"])
+        MODEL_TELUGISH = WhisperModel(str(Path(dl_dir) / "models" / "telugish-whisper-small-int8"), device="cpu", compute_type="int8")
+    except Exception:
+        MODEL_TELUGISH = MODEL_SMALL
 
 SEMANTIC_VAD = IndicSemanticVAD(base_silence_ms=300, max_semantic_hold_ms=1650)
 DUPLEX_ARB = FullDuplexArbitrator()

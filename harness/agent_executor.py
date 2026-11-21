@@ -13,7 +13,7 @@ import time
 import urllib.request
 from pathlib import Path
 
-ENV_PATH = Path("/home/pavan_veesam/vaani_harness/.env")
+ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 if ENV_PATH.exists():
     for line in ENV_PATH.read_text(encoding="utf-8").splitlines():
         if "=" in line:
