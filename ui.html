@@ -140,17 +140,17 @@
   <!-- LEFT: BASE MODEL PIPELINE -->
   <div class="ab-col base">
     <div style="display:flex;justify-content:space-between;align-items:center;">
-      <h2 style="margin:0;font-size:17px;color:var(--red);">❌ BASE PIPELINE (Stock Whisper-Tiny + 300ms Fixed Acoustic VAD)</h2>
+      <h2 style="margin:0;font-size:17px;color:var(--red);">❌ WITHOUT HARNESS (Amazon Transcribe en-IN + 300ms Fixed VAD)</h2>
       <span class="chip red" id="baseWerChip">WER: --%</span>
     </div>
     <div style="color:var(--muted);font-size:12.5px;margin-top:4px;">
-      Standard voice harness: cuts off at 300ms pause, aborts TTS on "Haan/Sare", mangles Indian names & self-corrections.
+      Raw AWS Transcribe without our harness: chops at 300ms pause, aborts TTS on "Haan/Sare", mangles Indian names & self-corrections.
     </div>
 
-    <div style="margin-top:14px;font-size:12.5px;color:var(--muted);font-weight:700;">1. WHAT STANDARD 300ms VAD CAPTURED (CHOPPED AT PAUSE):</div>
+    <div style="margin-top:14px;font-size:12.5px;color:var(--muted);font-weight:700;">1. AMAZON TRANSCRIBE OUTPUT AFTER 300ms VAD CUTOFF:</div>
     <div class="box" id="baseChoppedOut" style="border-color:var(--red);color:#ffa198;">Loading...</div>
 
-    <div style="margin-top:12px;font-size:12.5px;color:var(--muted);font-weight:700;">2. EVEN IF UNCHOPPED — RAW STOCK WHISPER OUTPUT (ENTITY & SELF-CORRECTION FAILURES):</div>
+    <div style="margin-top:12px;font-size:12.5px;color:var(--muted);font-weight:700;">2. EVEN WITHOUT VAD CUTOFF — RAW AMAZON TRANSCRIBE en-IN OUTPUT:</div>
     <div class="box" id="baseFullOut" style="color:#c9d1d9;">Loading...</div>
 
     <div style="margin-top:12px;font-size:12.5px;color:var(--muted);font-weight:700;">3. FULL-DUPLEX OVERLAP BEHAVIOR:</div>
@@ -160,11 +160,11 @@
   <!-- RIGHT: VAANI-HARNESS PIPELINE -->
   <div class="ab-col vaani">
     <div style="display:flex;justify-content:space-between;align-items:center;">
-      <h2 style="margin:0;font-size:17px;color:var(--green);">✅ VAANI-HARNESS (Semantic VAD + OpenFlow-Telugish + Entity Lattice + Smart Dictation)</h2>
+      <h2 style="margin:0;font-size:17px;color:var(--green);">✅ WITH VAANI-HARNESS (Same Amazon Transcribe en-IN + Semantic VAD + Entity Lattice + OpenFlow Fallback)</h2>
       <span class="chip green" id="vaaniWerChip">WER: --%</span>
     </div>
     <div style="color:var(--muted);font-size:12.5px;margin-top:4px;">
-      Holds turn across dangling En/Te/Hi syntax, shields backchannels, repairs Indian names, resolves self-corrections.
+      Same commercial base STT wrapped in our 4-pillar Indian harness: holds turns, shields backchannels, repairs Indian names & Telugish code-mix.
     </div>
 
     <div style="margin-top:14px;font-size:12.5px;color:var(--muted);font-weight:700;">1. INDIC SEMANTIC VAD + FINAL SMART DICTATION OUTPUT:</div>

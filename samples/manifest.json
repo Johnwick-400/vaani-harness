@@ -94,5 +94,21 @@
     "is_noise": false,
     "wav_path": "/home/pavan_veesam/vaani_harness/samples/test_6_true_barge_in_interruption.wav",
     "wav_url": "/samples/test_6_true_barge_in_interruption.wav"
+  },
+  {
+    "id": "test_7_live_hall_telugish",
+    "title": "7. Real Hackathon Hall Telugish (Pavan Live Voice vs. Amazon Transcribe)",
+    "category": "Live Hall Telugish",
+    "voice": "Live Human Mic (RMZ The Loft)",
+    "part_a": "Naku andi task andulo pending undo",
+    "pause_ms": 600,
+    "part_b": "naku oka escalation mail rayi aa mail vachchedaka first mail poyaru management",
+    "ground_truth": "Naku andi task andulo pending undo naku oka escalation mail rayi aa mail vachchedaka naku first mail poyaru management",
+    "clean_target": "Naku andi task andulo pending undo naku oka escalation mail rayi aa mail vachchedaka naku first mail poyaru management",
+    "overlap_event": "Sare",
+    "overlap_ms": 400,
+    "is_noise": false,
+    "wav_path": "/home/pavan_veesam/vaani_harness/samples/test_7_live_hall_telugish.wav",
+    "wav_url": "/samples/test_7_live_hall_telugish.wav"
   }
 ]
