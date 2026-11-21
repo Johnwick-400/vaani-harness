@@ -58,13 +58,14 @@ class FullDuplexArbitrator:
 # 2. Pan-India Names, Localities & Financial Gazetteer + Phonetic Normalizer
 INDIAN_ENTITY_GAZETTEER = {
     # People & Founders
-    "Akhilesh Damaraju": ["achilles dama raju", "akilesh damaraju", "akhilesh dama raju", "akilesh dharma raju", "akhilesh"],
+    "Akhilesh Damaraju": ["achilles dama raju", "akilesh damaraju", "akhilesh dama raju", "akilesh dharma raju", "akhilesh damraju", "akilesh damraju"],
     "Keshav Reddy": ["cash of ready", "keshav ready", "keshav reddi", "kesav reddy", "cash have ready"],
     "Rajeev Ranjan": ["rajiv ranjan", "rajeeb ranjan", "rajeev runjan"],
     "Pavan Teja Veesam": ["pawan teja visam", "pavan tej", "pavan veesam"],
     # Hyderabad / Bengaluru / India Localities & Tech Parks
-    "RMZ The Loft, Raidurg": ["rmc the loft right durg", "rmz loft ray durg", "r m z the loft right durg", "rmz the loft raidurg", "rmc loft raidurg"],
-    "Raidurg": ["right durg", "ray durg", "rai durg", "ride org"],
+    "RMZ The Loft, Raidurg": ["rmc the loft right durg", "rmz loft ray durg", "r m z the loft right durg", "rmz the loft raidurg", "rmc loft raidurg", "rmz the loft, raigur", "rmz the loft raigur"],
+    "Raidurg": ["right durg", "ray durg", "rai durg", "ride org", "raigur", "raidurg"],
+    "Bhaiya": ["bhaya", "baiya", "buy a"],
     "Madhapur": ["mother poor", "madha poor", "madapur", "matha pur"],
     "Chikkadpally": ["chicken pally", "chikkad pally", "chikadpalli"],
     "Gachibowli": ["gachi bowli", "gotchi bowli", "gachiboli"],
@@ -108,6 +109,10 @@ class IndianEntityLattice:
             while i <= len(words) - n:
                 span = " ".join(words[i : i + n])
                 span_clean = re.sub(r"[^a-zA-Z0-9\s]", "", span)
+                # Skip if span already contains a resolved canonical entity
+                if any(c.lower() in span_clean.lower() for c in INDIAN_ENTITY_GAZETTEER):
+                    i += 1
+                    continue
                 skey = indic_phonetic_key(span_clean)
                 if len(skey) >= 5:
                     for canonical, ckey in canon_keys.items():
