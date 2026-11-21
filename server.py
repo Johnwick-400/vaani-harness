@@ -261,6 +261,12 @@ async def evaluate_uploaded_audio(
     tmp_in.unlink(missing_ok=True)
     res = evaluate_single_wav(tmp_wav, overlap_event=overlap_event)
     tmp_wav.unlink(missing_ok=True)
+    res["autonomous_agent_execution"] = ACTION_EXECUTOR.execute_closed_loop(
+        res["vaani_harness"]["final_clean_output"],
+        res["vaani_harness"]["structured_action_json"],
+        res["vaani_harness"]["self_correction_retractions"],
+        res["vaani_harness"]["entity_corrections"],
+    )
     return JSONResponse(res)
 
 
