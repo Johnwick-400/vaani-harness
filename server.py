@@ -20,6 +20,7 @@ from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from faster_whisper import WhisperModel
 
+from harness.agent_executor import AutonomousActionExecutor
 from harness.pillars import FullDuplexArbitrator, IndianEntityLattice, SmartDictationEngine
 from harness.semantic_vad import IndicSemanticVAD
 
@@ -38,6 +39,7 @@ SEMANTIC_VAD = IndicSemanticVAD(base_silence_ms=300, max_semantic_hold_ms=1650)
 DUPLEX_ARB = FullDuplexArbitrator()
 ENTITY_LATTICE = IndianEntityLattice()
 SMART_DICTATION = SmartDictationEngine()
+ACTION_EXECUTOR = AutonomousActionExecutor()
 
 
 def word_error_rate(ref: str, hyp: str) -> float:
@@ -186,6 +188,12 @@ def evaluate_preset_sample(sample_id: str):
         is_noise=item["is_noise"],
     )
     res["sample_meta"] = item
+    res["autonomous_agent_execution"] = ACTION_EXECUTOR.execute_closed_loop(
+        res["vaani_harness"]["final_clean_output"],
+        res["vaani_harness"]["structured_action_json"],
+        res["vaani_harness"]["self_correction_retractions"],
+        res["vaani_harness"]["entity_corrections"],
+    )
     return JSONResponse(res)
 
 

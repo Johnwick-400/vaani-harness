@@ -179,6 +179,15 @@
   </div>
 </div>
 
+<!-- STAGE 2: OPENAI GPT-4o + AWS POLLY AUTONOMOUS 4-PILLAR ACTION AGENT -->
+<div class="ab-col" style="border-top: 4px solid var(--blue); margin-bottom: 20px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <h2 style="margin:0;font-size:17px;color:var(--blue);">🚀 STAGE 2: Autonomous 4-Step Action Loop (OpenAI GPT-4o + AWS Polly Kajal en-IN)</h2>
+    <audio id="agentVoicePlayer" controls style="height:32px;"></audio>
+  </div>
+  <div class="box" id="agentLoopOut" style="margin-top:10px;">Running autonomous tool execution...</div>
+</div>
+
 <div class="ab-col" id="benchTablePanel" style="display:none;margin-bottom:20px;">
   <h3 style="margin:0 0 8px 0;">📊 Complete 6-Recording Side-by-Side Quantitative Benchmark (Same WAVs on Base vs. VAANI-HARNESS)</h3>
   <table>
@@ -258,6 +267,21 @@ function renderComparison(d) {
 
   document.getElementById('vaaniDuplexOut').innerHTML = `<span class="chip green">${v.duplex_behavior}</span>`;
   document.getElementById('vaaniJsonOut').textContent = JSON.stringify(v.structured_action_json, null, 2);
+
+  if (d.autonomous_agent_execution) {
+    const ag = d.autonomous_agent_execution;
+    const stepsHtml = (ag.pillar_2_reason_and_plan || []).map(s => `<li>${s}</li>`).join('');
+    const toolsHtml = (ag.pillar_3_act_tool_traces || []).map(t => `<span class="chip blue">[${t.tool}: ${t.status}] ${t.detail}</span>`).join('<br/>');
+    document.getElementById('agentLoopOut').innerHTML = `
+      <div><b>1. Understand Objective:</b> ${ag.pillar_1_understand}</div>
+      <div style="margin-top:6px;"><b>2. Reason & Plan (${ag.llm_model}):</b><ul style="margin:4px 0 8px 18px;">${stepsHtml}</ul></div>
+      <div style="margin-top:6px;"><b>3. Act (Real Tool Traces):</b><br/>${toolsHtml}</div>
+      <div style="margin-top:8px;color:#7ee787;"><b>4. Close the Loop (${ag.tts_engine} • Ref ${ag.reference_id}):</b> "${ag.pillar_4_close_the_loop_script}"</div>
+    `;
+    if (ag.closing_audio_mp3_b64) {
+      document.getElementById('agentVoicePlayer').src = 'data:audio/mp3;base64,' + ag.closing_audio_mp3_b64;
+    }
+  }
 }
 
 async function runSelectedSample() {
